@@ -31,12 +31,12 @@ class Hanoi:
                           small_radius * 2 * disc * growth_factor)
             y -= disc_height
 
+if __name__ == '__main__':
+    hanoi = Hanoi(5)
+    Scene.set_draw_func(hanoi.draw)  # necessário para renderizar a torre na tela
 
-hanoi = Hanoi(5)
-Scene.set_draw_func(hanoi.draw)  # necessário para renderizar a torre na tela
-
-sleep(1)
-hanoi.move(1, 3)
-sleep(1)
-hanoi.move(1, 2)
-sleep(1)
+    sleep(1)
+    hanoi.move(1, 3)
+    sleep(1)
+    hanoi.move(1, 2)
+    sleep(1)
