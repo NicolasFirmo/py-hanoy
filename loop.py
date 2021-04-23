@@ -1,36 +1,46 @@
 import pygame as pg
-from pygame import color
-from pygame.locals import *
-from threading import Thread, Lock, Event
-from renderer import draw_cylinder
-from random import randint
+from threading import Thread
 
-pg.init()
 
-window = pg.display.set_mode((800, 450))
-pg.display.set_caption('Dale')
+class Scene:
+    def __draw_func(): pass
+    args = None
+    kwargs = None
+    width = 960
+    height = 540
 
-h, r = 50, 50
-color = (randint(0, 255), randint(0, 255), randint(0, 255))
-while True:
-    pg.display.update()
-    x, y = pg.mouse.get_pos()
+    @classmethod
+    def set_draw_func(cls, func, *args, **kwargs):
+        cls.__draw_func = func
+        cls.args = args
+        cls.kwargs = kwargs
 
-    window.fill((0, 0, 0))
-    draw_cylinder(window, (x, y), h, r, color)
+    @classmethod
+    def draw(cls, surface):
+        cls.__draw_func(surface, cls.width, cls.height,
+                        *cls.args, **cls.kwargs)
 
-    keys = pg.key.get_pressed()
-    if keys[pg.K_UP]:
-        h -= 0.1
-    if keys[pg.K_DOWN]:
-        h += 0.1
-    if keys[pg.K_LEFT]:
-        r -= 0.1
-    if keys[pg.K_RIGHT]:
-        r += 0.1
 
-    for event in pg.event.get():
-        if event.type == QUIT:
-            pg.quit()
-        elif event.type == MOUSEBUTTONDOWN:
-            color = (randint(0, 255), randint(0, 255), randint(0, 255))
+def run():
+    pg.init()
+
+    window = pg.display.set_mode((Scene.width, Scene.height))
+    pg.display.set_caption('Torre de Hanoi')
+
+    while True:
+        window.fill((0, 0, 0))
+
+        Scene.draw(window)
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+            elif event.type == pg.VIDEORESIZE:
+                Scene.width = event.w
+                Scene.height = event.h
+
+        pg.display.update()
+
+
+t = Thread(target=run)
+t.start()

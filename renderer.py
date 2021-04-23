@@ -1,5 +1,4 @@
 import pygame as pg
-from pygame.locals import *
 
 
 def draw_cylinder(surface, pos, height, radius, color=(255, 255, 255)):
